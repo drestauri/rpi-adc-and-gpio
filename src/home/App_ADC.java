@@ -27,11 +27,21 @@ public class App_ADC {
 		
 		adc.setGain_3v();
 
-		adc.start();
+		// To start callback execution in response to events (changes in value greater than event_threshold set above)
+		// Note: would probably have to modify how start() is defined to make it useful
+		//adc.start();
 		
+		// Can also poll pins manually
 		while(keepRunning)
 		{
-			Thread.sleep(10); // slow the loop rate to keep cpu usage down
+			System.out.println("Analog0:" + adc.getAnalog0_voltage());
+			System.out.println("Analog1:" + adc.getAnalog1_voltage());
+			System.out.println("Analog2:" + adc.getAnalog2_voltage());
+			System.out.println("Analog3:" + adc.getAnalog3_voltage());
+			System.out.println();
+			
+			// set to 1000 for this test, but 10-100 is better in practice
+			Thread.sleep(1000); // slow the loop rate to keep cpu usage down
 		}
 		
 		adc.kill();

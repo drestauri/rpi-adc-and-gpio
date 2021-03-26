@@ -33,7 +33,7 @@ public class Adc {
     ADS1115GpioProvider gpioProvider;
 
     // provision gpio analog input pins from ADS1115
-    GpioPinAnalogInput myInputs[] = new GpioPinAnalogInput[4];
+    GpioPinAnalogInput inputs[] = new GpioPinAnalogInput[4];
     
     public Adc(){
 
@@ -42,10 +42,10 @@ public class Adc {
     public void init(int event_threshold, int monitor_interval) throws UnsupportedBusNumberException, IOException {
     	gpioProvider = new ADS1115GpioProvider(I2CBus.BUS_1, ADS1115GpioProvider.ADS1115_ADDRESS_0x48);
     	
-    	myInputs[0] = gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A0, "MyAnalogInput-A0");
-    	myInputs[1] = gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A1, "MyAnalogInput-A1");
-    	myInputs[2] = gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A2, "MyAnalogInput-A2");
-    	myInputs[3] = gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A3, "MyAnalogInput-A3");
+    	inputs[0] = gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A0, "MyAnalogInput-A0");
+    	inputs[1] = gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A1, "MyAnalogInput-A1");
+    	inputs[2] = gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A2, "MyAnalogInput-A2");
+    	inputs[3] = gpio.provisionAnalogInputPin(gpioProvider, ADS1115Pin.INPUT_A3, "MyAnalogInput-A3");
     	
     	// Define a threshold value for each pin for analog value change events to be raised.
 		// It is important to set this threshold high enough so that you don't overwhelm your program with change events for insignificant changes
@@ -99,14 +99,45 @@ public class Adc {
 				
 				// display output
 				System.out.println(" (" + event.getPin().getName() +") : VOLTS=" + df.format(voltage) + " | PERCENT=" + pdf.format(percent) + "% | RAW=" + value + " ");
-				    
 			}
 		};
 		
-		myInputs[0].addListener(listener);
-		myInputs[1].addListener(listener);
-		myInputs[2].addListener(listener);
-		myInputs[3].addListener(listener);
+		inputs[0].addListener(listener);
+		inputs[1].addListener(listener);
+		inputs[2].addListener(listener);
+		inputs[3].addListener(listener);
+    }
+    
+    public double getAnalog0_voltage()
+    {
+    	double value = inputs[0].getValue();
+		double percent = ((value * 100) / ADS1115GpioProvider.ADS1115_RANGE_MAX_VALUE);
+		double voltage = gpioProvider.getProgrammableGainAmplifier(inputs[0].getPin()).getVoltage() * (percent/100);
+    	return voltage;
+    }
+    
+    public double getAnalog1_voltage()
+    {
+    	double value = inputs[1].getValue();
+		double percent = ((value * 100) / ADS1115GpioProvider.ADS1115_RANGE_MAX_VALUE);
+		double voltage = gpioProvider.getProgrammableGainAmplifier(inputs[1].getPin()).getVoltage() * (percent/100);
+    	return voltage;
+    }
+    
+    public double getAnalog2_voltage()
+    {
+    	double value = inputs[2].getValue();
+		double percent = ((value * 100) / ADS1115GpioProvider.ADS1115_RANGE_MAX_VALUE);
+		double voltage = gpioProvider.getProgrammableGainAmplifier(inputs[2].getPin()).getVoltage() * (percent/100);
+    	return voltage;
+    }
+    
+    public double getAnalog3_voltage()
+    {
+    	double value = inputs[3].getValue();
+		double percent = ((value * 100) / ADS1115GpioProvider.ADS1115_RANGE_MAX_VALUE);
+		double voltage = gpioProvider.getProgrammableGainAmplifier(inputs[3].getPin()).getVoltage() * (percent/100);
+    	return voltage;
     }
     
     public void kill()
