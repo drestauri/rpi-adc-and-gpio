@@ -57,7 +57,7 @@ public class Adc {
 		gpioProvider.setMonitorInterval(monitor_interval);
     }
     
-    public void setGain_3v()
+    public void setGain_3_3v()
     {
     	// ATTENTION !!
 		// It is important to set the PGA (Programmable Gain Amplifier) for all analog input pins.
@@ -69,7 +69,7 @@ public class Adc {
 		gpioProvider.setProgrammableGainAmplifier(ProgrammableGainAmplifierValue.PGA_4_096V, ADS1115Pin.ALL);
     }
     
-    public void setGain_5v()
+    public void setGain_5_0v()
     {
     	// ATTENTION !!
 		// It is important to set the PGA (Programmable Gain Amplifier) for all analog input pins.
